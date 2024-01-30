@@ -16,3 +16,14 @@ git init
 git add . <!-- para adicionar todos os arquivos -->
 git commit -m 'Mensagem'
 git remote add origin Url do git
+git push origin main -u
+
+Migrando a base dedados do Django
+
+python manage.py makemigrations
+python manage.py migrate
+
+Criando e modificando a senha do super usuário Django
+
+python manage.py createsuperuser
+python manage.py changepassword USERNAME *Caso eu esqueça a senha
