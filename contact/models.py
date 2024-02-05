@@ -36,10 +36,10 @@ class Contact(models.Model):
         blank=True, null=True,
     )
     
-    ower = models.ForeignKey(
-        User, 
+    owner = models.ForeignKey(
+        User,
         on_delete=models.SET_NULL,
-        blank=True, null=True,
+        blank=True, null=True
     )
 
     def __str__(self) -> str:

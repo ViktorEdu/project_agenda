@@ -1,3 +1,5 @@
+#type: ignore
+#flake8: noqa
 """
 Django settings for project_agenda project.
 
@@ -108,7 +110,7 @@ LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_TZ = True
 
