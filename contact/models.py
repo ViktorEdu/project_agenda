@@ -1,8 +1,7 @@
-from email.policy import default
-from os import name
-from unicodedata import category
+
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 #id (primary - automático)
@@ -10,7 +9,13 @@ from django.utils import timezone
 #email(email), createddate(date), description(text)
 #category(foreign), show(boolean), owner(foreign key)
 #picture(imagem)
+
+
 class Category(models.Model):
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
     name = models.CharField(max_length=50)
     def __str__(self) -> str:
         return f'{self.name}'
@@ -31,6 +36,11 @@ class Contact(models.Model):
         blank=True, null=True,
     )
     
+    ower = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL,
+        blank=True, null=True,
+    )
 
     def __str__(self) -> str:
         return f'{self.first_name} {self.last_name}'
