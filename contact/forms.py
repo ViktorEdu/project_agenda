@@ -1,12 +1,6 @@
-from collections.abc import Mapping
-from typing import Any
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.files.base import File
-from django.db.models.base import Model
-from django.forms.utils import ErrorList
 from . import models
-
 
 
 class ContactForm(forms.ModelForm):
@@ -18,6 +12,7 @@ class ContactForm(forms.ModelForm):
         ),
         label= 'Primeiro Nome',
         help_text='Digite seu primeiro nome aqui'
+
     )
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args ,**kwargs)
@@ -26,11 +21,10 @@ class ContactForm(forms.ModelForm):
     #         'class': 'classe-a classe-b',
     #         'placeholder': 'Primeiro Nome',
     #         })
+
     class Meta:
         model = models.Contact
-        fields =( 
-            'first_name','last_name','phone'
-        )
+        fields =('first_name','last_name','phone')
 
         # widgets = {
         #     'first_name': forms.TextInput(
@@ -42,20 +36,30 @@ class ContactForm(forms.ModelForm):
         # }
     def clean(self):
         cleaned_data = self.cleaned_data
-        
-        self.add_error(
-            None,
-            ValidationError(
-                'Mensagem de erro',
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
+       
+
+        if first_name == last_name:
+            msg =ValidationError(
+                'O Sobrenome não pode ser igual ao primeiro nome',
                 code='invalid'
             )
-        )
-        self.add_error(
-            None,
-            ValidationError(
-                'Mensagem de erro 2',
-                code='invalid'
-            )
-        )
-        
+            self.add_error('first_name',msg)
+            self.add_error('last_name',msg)
+            
         return super().clean()
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+
+        if first_name == 'ABC':
+            self.add_error(
+                'first_name',
+                ValidationError(
+                    'Não digite "ABC" nesse campo !',
+                    code='invalid'
+                )
+        )
+        # print('PAssei no clean do first name')
+        return first_name
