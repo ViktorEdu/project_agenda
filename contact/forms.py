@@ -1,3 +1,4 @@
+import email
 from django import forms
 from django.core.exceptions import ValidationError
 from . import models
@@ -24,7 +25,9 @@ class ContactForm(forms.ModelForm):
 
     class Meta:
         model = models.Contact
-        fields =('first_name','last_name','phone')
+        fields =('first_name','last_name','phone',
+                 'email', 'description','category',
+                )
 
         # widgets = {
         #     'first_name': forms.TextInput(
@@ -38,7 +41,8 @@ class ContactForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         first_name = self.cleaned_data.get('first_name')
         last_name = self.cleaned_data.get('last_name')
-       
+        email = self.cleaned_data.get('email')
+        description = self.cleaned_data.get('description')
 
         if first_name == last_name:
             msg =ValidationError(
