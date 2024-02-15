@@ -1,10 +1,14 @@
 
+import email
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+
 from . import models
 
-
 class ContactForm(forms.ModelForm):
+
     picture = forms.ImageField(widget=forms.FileInput(
         attrs={'accept': 'image/*',
                }
@@ -53,5 +57,39 @@ class ContactForm(forms.ModelForm):
                     code='invalid'
                 )
         )
-        # print('PAssei no clean do first name')
         return first_name
+    
+class RegisterForm(UserCreationForm):
+    first_name = forms.CharField(
+        required=True,
+        min_length=3,
+        help_text='Digite o seu primeiro nome.',
+        strip=True,
+        label='Primeiro Nome'
+        )
+    last_name = forms.CharField(
+        required=True,
+        min_length=3,
+        help_text='Digite o seu sobrenome.',
+        strip=True
+        )
+    email = forms.EmailField(
+        help_text='Digite o seu Email',
+        )
+    
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name','email', 
+            'username', 'password1', 'password2',
+        )
+
+    def clean_email(self):
+        email =self.cleaned_data.get('email')
+        if User.objects.filter(email='email').exists():
+            self.add_error(
+                'email',
+                ValidationError('O email já existe',
+                                code='invalid'))
+
+        return email
